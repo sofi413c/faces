@@ -30,8 +30,9 @@
     </style>
   </head>
   <body>
-    <main id="holder"></main>
     <h1>Persongalleri</h1>
+    <main id="holder"></main>
+
     <template>
       <article>
         <img class="billede" src="" alt="" />
@@ -43,8 +44,8 @@
     </template>
 
     <script>
-      const url = "https://persongalleri-5d3e.restdb.io/rest/persongalleri";
-      const key = { headers: { "x-apikey": "600fe9211346a1524ff12e31" } };
+      const url = "https://persongalleri-5d3e.restdb.io/rest/persongalleri"; //endpoint el. URL
+      const key = { headers: { "x-apikey": "600fe9211346a1524ff12e31" } }; // API nøgle
 
       async function hentData() {
         const rensponse = await fetch(url, key);
