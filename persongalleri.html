@@ -36,8 +36,7 @@
     <template>
       <article>
         <img class="billede" src="" alt="" />
-        <h2 class="fornavn"></h2>
-        <h3 class="efternavn"></h3>
+        <h2 class="navn"></h2>
         <p class="titel"></p>
         <p class="fødselsdag"></p>
       </article>
@@ -62,8 +61,7 @@
           const klon = skabelon.cloneNode(true);
           klon.querySelector("img").src = "billeder/" + person.billede; //referer til kolonnernes navne i restdb
           klon.querySelector("img").alt = person.billede;
-          klon.querySelector(".fornavn").textContent = person.fornavn;
-          klon.querySelector(".efternavn").textContent = person.efternavn;
+          klon.querySelector(".navn").textContent = person.fornavn + " " + person.efternavn;
           klon.querySelector(".titel").textContent = person.titel;
           klon.querySelector(".fødselsdag").textContent = "Født d." + person.fødselsdag.slice(0, 10);
           klon.querySelector("article").style.borderRadius = "lem";
