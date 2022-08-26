@@ -8,8 +8,12 @@
     <title>Persongalleri</title>
 
     <style>
+      #holder h1 {
+        justify-content: center;
+      }
       img {
         max-width: 100%;
+        border-radius: 100%;
       }
 
       #holder {
@@ -19,14 +23,15 @@
       }
 
       article {
-        border: 1px solid orange;
+        border: 1px solid black;
         padding: 3rem;
+        border-radius: 1rem;
       }
     </style>
   </head>
   <body>
-    <h1>Persongalleri</h1>
     <main id="holder"></main>
+    <h1>Persongalleri</h1>
     <template>
       <article>
         <img class="billede" src="" alt="" />
@@ -59,7 +64,7 @@
           klon.querySelector(".fornavn").textContent = person.fornavn;
           klon.querySelector(".efternavn").textContent = person.efternavn;
           klon.querySelector(".titel").textContent = person.titel;
-          klon.querySelector(".fødselsdag").textContent = "Født d." + person.fødselsdag.slice(0);
+          klon.querySelector(".fødselsdag").textContent = "Født d." + person.fødselsdag.slice(0, 10);
           klon.querySelector("article").style.borderRadius = "lem";
           holder.appendChild(klon);
         });
