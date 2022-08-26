@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Persongalleri</title>
+
+    <style>
+      img {
+        max-width: 100%;
+      }
+
+      #holder {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+      }
+
+      article {
+        border: 1px solid orange;
+        padding: 3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Persongalleri</h1>
+    <main id="holder"></main>
+    <template>
+      <article>
+        <img class="billede" src="" alt="" />
+        <h2 class="fornavn"></h2>
+        <h3 class="efternavn"></h3>
+        <p class="titel"></p>
+        <p class="fødselsdag"></p>
+      </article>
+    </template>
+
+    <script>
+      const url = "https://persongalleri-5d3e.restdb.io/rest/persongalleri";
+      const key = { headers: { "x-apikey": "600fe9211346a1524ff12e31" } };
+
+      async function hentData() {
+        const rensponse = await fetch(url, key);
+        const personer = await rensponse.json();
+        console.log("PERSONER", personer);
+        vis(personer);
+      }
+
+      function vis(personer) {
+        console.log(personer);
+        const holder = document.querySelector("#holder");
+        const skabelon = document.querySelector("template").content;
+        personer.forEach((person) => {
+          const klon = skabelon.cloneNode(true);
+          klon.querySelector("img").src = "billeder/" + person.billede; //referer til kolonnernes navne i restdb
+          klon.querySelector("img").alt = person.billede;
+          klon.querySelector(".fornavn").textContent = person.fornavn;
+          klon.querySelector(".efternavn").textContent = person.efternavn;
+          klon.querySelector(".titel").textContent = person.titel;
+          klon.querySelector(".fødselsdag").textContent = "Født d." + person.fødselsdag.slice(0);
+          klon.querySelector("article").style.borderRadius = "lem";
+          holder.appendChild(klon);
+        });
+      }
+      hentData(); //loop
+    </script>
+  </body>
+</html>
