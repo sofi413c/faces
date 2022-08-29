@@ -37,6 +37,15 @@
   </head>
   <body>
     <h1>Persongalleri</h1>
+    <h2>Alle</h2>
+
+    <nav>
+      <button data-troende="alle" class="valgt">Alle</button>
+      <button data-troende="ja">Troende</button>
+      <button data-troende="nej">Ikke troende</button>
+      <button data-troende="tvivler">Tvivlende</button>
+    </nav>
+
     <main id="holder"></main>
 
     <template>
@@ -51,27 +60,43 @@
     <script>
       const url = "https://persongalleri-5d3e.restdb.io/rest/persongalleri"; //endpoint el. URL
       const key = { headers: { "x-apikey": "600fe9211346a1524ff12e31" } }; // API nøgle
+      let personer;
+      let filter = "alle";
+      const header = document.querySelector("h2");
+
+      //FILTRERINGS ØVELSE//
+      const filterKnapper = document.querySelectorAll("nav button"); // hiver fat i alle mine buttons under "nav"
+      filterKnapper.forEach((knap) => knap.addEventListener("click", filtrerPersoner)); //Sætter en eventlistener på alle knapper, fortæller at den skal fortage en handling ved klik
+
+      function filtrerPersoner() {
+        filter = this.dataset.troende; //når der klikkes på en knap laves filterknappen om til dataattributten "data-troende" fra HTMLen.
+        visPersoner();
+        header.textContent = this.textContent; //this henviser til button der klikkes på.
+      }
 
       async function hentData() {
         const rensponse = await fetch(url, key);
-        const personer = await rensponse.json();
+        personer = await rensponse.json();
         console.log("PERSONER", personer);
-        vis(personer);
+        visPersoner();
       }
 
-      function vis(personer) {
-        console.log(personer);
+      function visPersoner() {
         const holder = document.querySelector("#holder");
         const skabelon = document.querySelector("template").content;
+        holder.textContent = "";
         personer.forEach((person) => {
-          const klon = skabelon.cloneNode(true);
-          klon.querySelector("img").src = "billeder/" + person.billede; //referer til kolonnernes navne i restdb
-          klon.querySelector("img").alt = person.billede;
-          klon.querySelector(".navn").textContent = person.fornavn + " " + person.efternavn;
-          klon.querySelector(".titel").textContent = person.titel;
-          klon.querySelector(".fødselsdag").textContent = "Født d." + person.fødselsdag.slice(0, 10);
-          klon.querySelector("article").style.borderRadius = "lem";
-          holder.appendChild(klon);
+          console.log("Troende", person.troende);
+          if (filter == person.troende || filter == "alle") {
+            const klon = skabelon.cloneNode(true);
+            klon.querySelector("img").src = "billeder/" + person.billede; //referer til kolonnernes navne i restdb
+            klon.querySelector("img").alt = person.billede;
+            klon.querySelector(".navn").textContent = person.fornavn + " " + person.efternavn;
+            klon.querySelector(".titel").textContent = person.titel;
+            klon.querySelector(".fødselsdag").textContent = "Født d." + person.fødselsdag.slice(0, 10);
+            klon.querySelector("article").style.borderRadius = "lem";
+            holder.appendChild(klon);
+          }
         });
       }
       hentData(); //loop
