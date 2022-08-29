@@ -28,11 +28,10 @@
         padding: 3rem;
         border-radius: 1rem;
       }
-      /* 
-      @media (max-width: 400px) {
-        #holder {
-          display: grid;
-        } */
+
+      .valgt {
+        border: 2px solid black;
+      }
     </style>
   </head>
   <body>
@@ -71,7 +70,7 @@
       function filtrerPersoner() {
         filter = this.dataset.troende; //når der klikkes på en knap laves filterknappen om til dataattributten "data-troende" fra HTMLen.
         document.querySelector(".valgt").classList.remove("valgt"); //fjern klassen valgt fra den knap
-        this.classList.add("valgt")//markerer den knap, som der klikkes på
+        this.classList.add("valgt"); //markerer den knap, som der klikkes på
         header.textContent = this.textContent; //this henviser til button der klikkes på. Gør at teksten ændres, når der filtreres
         visPersoner();
       }
