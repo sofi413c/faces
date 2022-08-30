@@ -12,7 +12,7 @@
         justify-content: center;
       }
       img {
-        max-width: 100%;
+        max-width: 30%;
         border-radius: 100%;
       }
 
@@ -32,18 +32,37 @@
       .valgt {
         border: 2px solid black;
       }
+
+      #popup {
+        border: 2px solid black;
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        justify-content: center;
+        align-items: center;
+        display: none;
+      }
+
+      #popup article {
+        background-color: white;
+        width: 80%;
+      }
     </style>
   </head>
   <body>
-    <h1>Persongalleri</h1>
-    <h2>Alle</h2>
+    <header>
+      <h1>Persongalleri</h1>
+      <h2>Alle</h2>
 
-    <nav>
-      <button data-troende="alle" class="valgt">Alle</button>
-      <button data-troende="ja">Troende</button>
-      <button data-troende="nej">Ikke troende</button>
-      <button data-troende="tvivler">Tvivlende</button>
-    </nav>
+      <nav>
+        <button data-troende="alle" class="valgt">Alle</button>
+        <button data-troende="ja">Troende</button>
+        <button data-troende="nej">Ikke troende</button>
+        <button data-troende="tvivler">Tvivlende</button>
+      </nav>
+    </header>
 
     <main id="holder"></main>
 
@@ -56,6 +75,14 @@
       </article>
     </template>
 
+    <div id="popup">
+      <article>
+        <img class="billede" src="" alt="" />
+        <h2></h2>
+        <p></p>
+        <p class="fødselsdag"></p>
+      </article>
+    </div>
     <script>
       const url = "https://persongalleri-5d3e.restdb.io/rest/persongalleri"; //endpoint el. URL
       const key = { headers: { "x-apikey": "600fe9211346a1524ff12e31" } }; // API nøgle
@@ -64,7 +91,7 @@
       const header = document.querySelector("h2");
 
       //FILTRERINGS ØVELSE//
-      const filterKnapper = document.querySelectorAll("nav button"); // hiver fat i alle mine buttons under "nav"
+      const filterKnapper = document.querySelectorAll(" header nav button"); // hiver fat i alle mine buttons under "nav"
       filterKnapper.forEach((knap) => knap.addEventListener("click", filtrerPersoner)); //Sætter en eventlistener på alle knapper, fortæller at den skal fortage en handling ved klik
 
       function filtrerPersoner() {
@@ -89,16 +116,32 @@
         personer.forEach((person) => {
           console.log("Troende", person.troende);
           if (filter == person.troende || filter == "alle") {
-            const klon = skabelon.cloneNode(true);
+            //gør at programmet loader alle, men sortere alle de troende. / == spørger er x det samme som y?, hvor = fortæller at x er det samme som y.
+            const klon = skabelon.cloneNode(true); // navngives klon, og tager fat i min template. Så jeg ikke behøver skrive document.qsl.
             klon.querySelector("img").src = "billeder/" + person.billede; //referer til kolonnernes navne i restdb
             klon.querySelector("img").alt = person.billede;
             klon.querySelector(".navn").textContent = person.fornavn + " " + person.efternavn;
+            klon.querySelector("article").addEventListener("click", () => visPopup(person));
             klon.querySelector(".titel").textContent = person.titel;
             klon.querySelector(".fødselsdag").textContent = "Født d." + person.fødselsdag.slice(0, 10);
             klon.querySelector("article").style.borderRadius = "lem";
             holder.appendChild(klon);
           }
         });
+      }
+      document.querySelector("#popup").addEventListener("click", () => (popup.style.display = "none"));
+
+      function visPopup(personData) {
+        // Med en anonym function kan vi medsende en parameter (personData) der indeholder al relevant data til at vise i popup’en
+        console.log(personData);
+        const popup = document.querySelector("#popup");
+        popup.style.display = "block";
+        popup.style.display = "flex";
+        popup.querySelector("img").src = "billeder/" + personData.billede;
+        popup.querySelector("img").alt = personData.fornavn;
+        popup.querySelector("h2").textContent = personData.fornavn + " " + personData.efternavn;
+        popup.querySelector("p").textContent = personData.titel;
+        popup.querySelector(".fødselsdag").textContent = "Født d." + personData.fødselsdag.slice(0, 10);
       }
       hentData(); //loop
     </script>
